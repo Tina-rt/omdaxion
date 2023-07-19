@@ -437,6 +437,8 @@
         }
 
         $('.best-score').text(getBestScore())
+        $('.score').text(getScore())
+        $('.timer').text(time)
 
         localStorage.setItem('time', time)
         $('.message').text("Cliquez sur les projets prioritaires le plus vite possible ! ")
@@ -453,7 +455,7 @@
         return parseInt(localStorage.getItem('point'))
     }
 
-    function getScore(point) {
+    function getScore() {
         return parseInt(localStorage.getItem('point'))
     }
 
@@ -533,11 +535,11 @@
             let time = getTime()
             $('.timer').text(time)
             time--
+            localStorage.setItem('time', time)
             if (time <= 0) {
                 clearInterval(id)
                 gameOver()
             }
-            localStorage.setItem('time', time)
         }, 1000)
         localStorage.setItem('id_timer', id)
     }
@@ -550,7 +552,7 @@
         $('.gameover').fadeOut()
 
 
-        $('.score').text(point)
+        $('.score').text(getScore())
 
     }
 
@@ -574,10 +576,13 @@
             point = getScore()
 
             let id_ = setInterval(() => {
-                $('.timer').text(time_left)
                 time_left--
-                point++
+                if (time_left <= 0){
+                    time_left = 0
+                }
+                $('.timer').text(time_left)
                 $('.score').text(point)
+                point++
                 if (time_left <= 0) {
                     clearInterval(id_)
                     setScore(point)
@@ -586,14 +591,14 @@
                         $('.best-score').text(getBestScore())
                     }
                 }
-            }, 10);
+            }, 20);
             $('.time_left').fadeIn()
 
 
 
         }, 1000);
         point = 0
-        time = 60
+        // time = 60
 
     }
 
