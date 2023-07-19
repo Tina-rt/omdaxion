@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Om daxion</title>
+</head>
+
+<body>
+    <div class="screen">
+        <aside class="game">
+            <img src="img/logo.png" height="200" alt="">
+            <p><em>Vous ete l'om daxion de Madagascar, selon vous, cliquez sur les priorités pour développer le
+                    pays</em></p>
+            
+            <div class="main_game">
+
+                <table id="grille">
+
+                    <tr>
+                        <td>
+                            <div class="case_"></div>
+                        </td>
+                    </tr>
+                </table>
+                <div class="gameover">
+                    <div class="message"></div>
+                    <div class="score"></div>
+                    <div class="time_left"></div>
+                    <div class="btn-start" onclick="startGame()">Commencer</div>
+                </div>
+            </div>
+            <div class="log">
+
+            </div>
+        </aside>
+        <aside>
+            <div class="score-section">
+                <h2>Score</h2>
+                <div class="score">0</div>
+            </div>
+            <div class="best-score-section">
+                <h2>Meilleur score</h2>
+                <div class="best-score">64</div>
+            </div>
+            <div class="timer-section">
+                <h2>Temps restant </h2><em>(votre mandat hahaa)</em>
+                <div class="timer">
+                    0
+                </div>
+            </div>
+            <div class="legende">
+
+                <h2>Legende</h2>
+                <p>
+                <table class="all_element">
+                    <tr>
+                        <td><img src="img/hopital.png" alt="hopital"></td>
+                        <td>Hopital</td>
+                    </tr>
+                    <tr>
+                        <td><img src="img/epp.png" width="30" alt="hopital"></td>
+                        <td>EPP manarapenitra</td>
+                    </tr>
+                    <tr>
+                        <td><img src="img/univ.png" alt="hopital"></td>
+                        <td>Université</td>
+                    </tr>
+
+                </table>
+                </p>
+            </div>
+
+
+        </aside>
+    </div>
+
+</body>
+
+</html>
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .title {
+        font-size: 3em;
+    }
+
+    .game p {
+        font-size: large;
+    }
+
+    .screen {
+        padding-top: 30px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        height: 90vh;
+    }
+
+    .game {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        padding: 20px;
+    }
+
+    .main_game {
+        position: relative
+    }
+
+
+
+    .gameover {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.87);
+        bottom: 0;
+        /* font-size: 3em; */
+        transition: opacity ease-in;
+        /* opacity: 0; */
+        /* display: none; */
+    }
+
+    .message {
+        font-size: 2em;
+        text-align: center;
+    }
+
+    .btn-start {
+        background-color: rgb(255, 166, 0);
+        padding: 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .case_ {
+        background-color: rgb(199, 129, 0);
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    #grille td {
+        position: relative;
+    }
+
+    .element {
+        position: absolute;
+    }
+
+    .score,
+    .timer, .best-score {
+        font-size: xx-large;
+    }
+
+    .time_left {
+        font-style: italic;
+        padding: 10px;
+    }
+
+    .projet {
+        background-color: white;
+    }
+
+    .valid_case {
+        background-color: rgb(255, 166, 0);
+    }
+
+    .invalid_case {
+        background-color: red;
+    }
+
+    .log {
+        border-radius: 10px;
+        margin: 10px;
+        color: white;
+        font-size: 1.2em;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 60px;
+    }
+</style>
+<script src="jquery-3.6.0.min.js"></script>
+<script>
+
+    let element = {
+        x: 0,
+        y: 2,
+        text: 'Prez'
+    }
+
+    let stade = {
+        prio: 1,
+        label: 'stade',
+        image: 'img/stade.png'
+    }
+    let parking = {
+        prio: 1,
+        label: 'parking',
+        image: 'img/parking.png'
+    }
+    let telepherique = {
+        prio: 1,
+        label: 'telepherique',
+        image: 'img/telepherique.png'
+    }
+    let univ = {
+        prio: 0,
+        label: 'Université',
+        image: 'img/univ.png'
+    }
+
+    let liste_projet = [stade, parking, univ, telepherique]
+
+    $('.all_element').empty()
+    liste_projet.forEach(projet => {
+        $('.all_element').append(
+            `<tr>
+                <td><img src="${projet.image}" alt="${projet.label}"></td>
+                <td>${projet.label}</td>
+            </tr>`
+        )
+    });
+
+
+    let grille = document.getElementById('grille')
+    let row = 10
+    let column = 10
+
+
+    let time = 40
+
+    var click_sound = new Audio('sound/click.wav')
+    var finish_sound = new Audio('sound/finished.wav')
+    var error_sound = new Audio('sound/error.wav')
+
+    function draw_grille() {
+        let grille = document.getElementById('grille')
+
+        grille.innerHTML = ""
+
+        for (let y = 0; y < row; y++) {
+            let tr = document.createElement('tr')
+            for (let x = 0; x < column; x++) {
+                let td = document.createElement('td')
+                let id = x.toString() + y.toString()
+                // td.id = id
+                td.innerHTML = `<div class="case_" id=${id}></div>`
+                tr.appendChild(td)
+
+            }
+            // const element = array[index];    
+            grille.appendChild(tr)
+        }
+    }
+
+    function placeElement(element) {
+        // console.log(element)
+        let grille = document.getElementById('grille')
+
+        let row = grille.firstChild
+        let x = 0
+        let y = 0
+        while (row) {
+            let case_ = row.firstChild
+
+            // console.log(y)
+            while (case_) {
+                if (x == element.x && y == element.y) {
+
+                    if (element.prio == 3) {
+                        $('#' + element.x + element.y).addClass('valid_case')
+                        console.log("ok")
+                    }
+                    else {
+
+                        case_.innerHTML = `
+                        <img width=30 onclick=clickElement(${JSON.stringify(element)}) src='${element.projet.image}' />
+                        `
+                    }
+                }
+                case_ = case_.nextSibling
+                x++
+            }
+            x = 0
+            row = row.nextSibling
+            y++
+
+        }
+
+    }
+    var list_element = []
+    var list_element_ok = []
+
+    function alreadyOnGrille(element) {
+        list_element.forEach(element_ => {
+            if (element_.x == element.x && element_.y == element.y) {
+                return true
+            }
+        });
+        return false
+    }
+    function placeRandom(number = 20) {
+        let index = 0
+        let places = []
+        while (index < number) {
+            let x = parseInt(Math.random() * 10), y = parseInt(Math.random() * 10)
+
+            let element = {
+                x: x,
+                y: y,
+                projet: liste_projet[parseInt(Math.random() * liste_projet.length)]
+            }
+            if (!(places.indexOf("" + x + y) > -1)) { // verifier si la place xy n'est pas occupee
+                list_element.push(element)
+                if (element.projet.prio) {
+                    list_element_ok.push(element)
+                }
+
+                $('#' + x.toString() + y.toString()).append(`<img width=30 onclick=clickElement(${JSON.stringify(element)}) src='${element.projet.image}' />`)
+                $('#' + x.toString() + y.toString()).addClass('projet')
+                places.push("" + x + y)
+                index++
+
+            }
+
+        }
+    }
+
+
+
+    function initGame() {
+        draw_grille()
+
+        localStorage.setItem('point', 0)
+        if (!localStorage.getItem('best_score')){
+            addBestScore(0)
+        }
+
+        $('.best-score').text(getBestScore())
+
+        localStorage.setItem('time', 60)
+        $('.message').text("Cliquez sur les projets prioritaires le plus vite possible ! ")
+        $('.time_left').hide()
+        $('.btn-start').text("Commencer")
+
+
+    }
+    // placeElement(element)
+
+
+    function addScore(point) {
+        localStorage.setItem('point', parseInt(point) + parseInt(localStorage.getItem('point')))
+        return parseInt(localStorage.getItem('point'))
+    }
+
+    function getScore(point){
+        return parseInt(localStorage.getItem('point'))
+    }
+
+    function setScore(point){
+        localStorage.setItem('point', parseInt(point))
+    }
+
+
+
+    function getTime(){
+        return parseInt(localStorage.getItem('time'))
+    }
+
+    function addBestScore(point){
+        localStorage.setItem('best_score', parseInt(point))
+        return parseInt(localStorage.getItem('best_score'))
+    }
+
+    function getBestScore(){
+        return parseInt(localStorage.getItem('best_score'))
+    }
+
+
+    function clickElement(element) {
+        // console.log(list_element)
+        let current_id = '#' + element.x + element.y
+        $(current_id).empty()
+
+        $(current_id).removeClass("projet")
+        $('.log').removeClass('invalid_case')
+        $('.log').addClass('valid_case')
+
+        if (element.projet.prio) {
+            click_sound.play()
+
+            let index = -1
+            let j = 0
+            list_element_ok.forEach(element_ok => {
+                if (element.x == element_ok.x && element.y == element_ok.y) {
+                    index = j
+                }
+                j++
+            });
+            list_element_ok.splice(index, 1)
+
+            point = addScore(1)
+            $(current_id).addClass('valid_case')
+            $('.log').addClass('valid_case')
+
+            $('.score').text(point)
+            $('.log').text("Oui, " + element.projet.label + " est un des priorite de l'ETAT")
+
+        }
+        else {
+            error_sound.play()
+            $(current_id).addClass('invalid_case')
+            $('.log').addClass('invalid_case')
+
+            $('.log').text("Non, " + element.projet.label + " n'est pas la priorite de l'om d'axion")
+            
+            let time = getTime()
+            time -= 10
+            localStorage.setItem('time', time)
+
+        }
+        if (list_element_ok.length == 0) {
+            gameOver()
+        }
+    }
+    function launchTime() {
+        let id = setInterval(() => {
+            let time = getTime()
+            time--
+            if (time <= 0) {
+                clearInterval(id)
+                gameOver()
+            }
+            localStorage.setItem('time', time)
+            $('.timer').text(time)
+        }, 1000)
+        localStorage.setItem('id_timer', id)
+    }
+
+    let point = 0
+    function startGame() {
+        initGame()
+        launchTime()
+        placeRandom()
+        $('.gameover').fadeOut()
+
+
+        $('.score').text(point)
+
+    }
+
+    // launchTime()
+    function gameOver() {
+        finish_sound.play()
+        $('.message').text("Jeu terminé !!")
+
+        $('.gameover').fadeIn()
+
+
+        point = addScore(1)
+        time_left = getTime()
+        $('.score').text(parseInt(point))
+
+        let id_timer = localStorage.getItem('id_timer')
+        clearInterval(id_timer)
+        $('.time_left').text("(+ " + time_left + ") temps restant")
+        $('.btn-start').text("Recommencer")
+        setTimeout(() => {
+            point = addScore(1)
+
+            let id_ = setInterval(() => {
+                time_left--
+                $('.timer').text(time_left)
+                point++
+                $('.score').text(point)
+                if (time_left == 0) {
+                    clearInterval(id_)
+                    setScore(point)
+                    if (getBestScore() < getScore()){
+                        addBestScore(getScore())
+                        $('.best-score').text(getBestScore())
+                    }
+                }
+            }, 10);
+            $('.time_left').fadeIn()
+
+            
+
+        }, 1000);
+        point = 0
+        time = 60
+
+    }
+
+    initGame()
+</script>
