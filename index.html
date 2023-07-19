@@ -12,7 +12,7 @@
     <div class="screen">
         <aside class="game">
             <img src="img/logo.png" height="200" alt="">
-            <p><em>Vous ete l'om daxion de Madagascar, selon vous, cliquez sur les priorités pour développer le
+            <p><em>Vous êtes l'om daxion de Madagascar, selon vous, cliquez sur les priorités pour développer le
                     pays</em></p>
             <aside class="aside-mobile">
                 <div class="score-section">
@@ -20,7 +20,7 @@
                     <div class="score">0</div>
                 </div>
                 <div class="best-score-section">
-                    <h2>Meilleur score</h2>
+                    <h2>Meilleure score</h2>
                     <div class="best-score">64</div>
                 </div>
                 <div class="timer-section">
@@ -34,18 +34,7 @@
                     <h2>Legende</h2>
                     <p>
                     <table class="all_element">
-                        <tr>
-                            <td><img src="img/hopital.png" alt="hopital"></td>
-                            <td>Hopital</td>
-                        </tr>
-                        <tr>
-                            <td><img src="img/epp.png" width="30" alt="hopital"></td>
-                            <td>EPP manarapenitra</td>
-                        </tr>
-                        <tr>
-                            <td><img src="img/univ.png" alt="hopital"></td>
-                            <td>Université</td>
-                        </tr>
+                        
 
                     </table>
                     </p>
@@ -80,7 +69,7 @@
                 <div class="score">0</div>
             </div>
             <div class="best-score-section">
-                <h2>Meilleur score</h2>
+                <h2>Meilleure score</h2>
                 <div class="best-score">64</div>
             </div>
             <div class="timer-section">
@@ -301,17 +290,17 @@
 
     let stade = {
         prio: 1,
-        label: 'stade',
+        label: 'Stade',
         image: 'img/stade.png'
     }
     let parking = {
         prio: 1,
-        label: 'parking',
+        label: 'Parking',
         image: 'img/parking.png'
     }
     let telepherique = {
         prio: 1,
-        label: 'telepherique',
+        label: 'Téléphérique',
         image: 'img/telepherique.png'
     }
     let univ = {
@@ -449,7 +438,7 @@
 
         $('.best-score').text(getBestScore())
 
-        localStorage.setItem('time', 60)
+        localStorage.setItem('time', time)
         $('.message').text("Cliquez sur les projets prioritaires le plus vite possible ! ")
         $('.time_left').hide()
         $('.btn-start').text("Commencer")
@@ -515,7 +504,7 @@
             $('.log').addClass('valid_case')
 
             $('.score').text(point)
-            $('.log').text("Oui, " + element.projet.label + " est un des priorite de l'ETAT")
+            $('.log').text("Oui, " + element.projet.label + " est parmi les priorités de l'ETAT")
 
         }
         else {
@@ -523,10 +512,15 @@
             $(current_id).addClass('invalid_case')
             $('.log').addClass('invalid_case')
 
-            $('.log').text("Non, " + element.projet.label + " n'est pas la priorite de l'om d'axion")
+            $('.log').text("Non, " + element.projet.label + " n'est pas la priorité de l'om d'axion")
 
             let time = getTime()
-            time -= 10
+            if (time < 10){
+                time = 0
+            }
+            else{
+                time -= 10
+            }
             localStorage.setItem('time', time)
 
         }
@@ -568,7 +562,7 @@
         $('.gameover').fadeIn()
 
 
-        point = addScore(1)
+        point = getScore()
         time_left = getTime()
         $('.score').text(parseInt(point))
 
@@ -577,14 +571,14 @@
         $('.time_left').text("(+ " + time_left + ") temps restant")
         $('.btn-start').text("Recommencer")
         setTimeout(() => {
-            point = addScore(1)
+            point = getScore()
 
             let id_ = setInterval(() => {
                 time_left--
                 $('.timer').text(time_left)
                 point++
                 $('.score').text(point)
-                if (time_left == 0) {
+                if (time_left <= 0) {
                     clearInterval(id_)
                     setScore(point)
                     if (getBestScore() < getScore()) {
