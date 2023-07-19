@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Om daxion</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
 </head>
 
 <body>
@@ -13,7 +14,45 @@
             <img src="img/logo.png" height="200" alt="">
             <p><em>Vous ete l'om daxion de Madagascar, selon vous, cliquez sur les priorités pour développer le
                     pays</em></p>
-            
+            <aside class="aside-mobile">
+                <div class="score-section">
+                    <h2>Score</h2>
+                    <div class="score">0</div>
+                </div>
+                <div class="best-score-section">
+                    <h2>Meilleur score</h2>
+                    <div class="best-score">64</div>
+                </div>
+                <div class="timer-section">
+                    <h2>Temps restant </h2><em>(votre mandat hahaa)</em>
+                    <div class="timer">
+                        0
+                    </div>
+                </div>
+                <div class="legende">
+
+                    <h2>Legende</h2>
+                    <p>
+                    <table class="all_element">
+                        <tr>
+                            <td><img src="img/hopital.png" alt="hopital"></td>
+                            <td>Hopital</td>
+                        </tr>
+                        <tr>
+                            <td><img src="img/epp.png" width="30" alt="hopital"></td>
+                            <td>EPP manarapenitra</td>
+                        </tr>
+                        <tr>
+                            <td><img src="img/univ.png" alt="hopital"></td>
+                            <td>Université</td>
+                        </tr>
+
+                    </table>
+                    </p>
+                </div>
+
+
+            </aside>
             <div class="main_game">
 
                 <table id="grille">
@@ -35,7 +74,7 @@
 
             </div>
         </aside>
-        <aside>
+        <aside class="aside2">
             <div class="score-section">
                 <h2>Score</h2>
                 <div class="score">0</div>
@@ -97,6 +136,7 @@
         padding-top: 30px;
         display: flex;
         flex-direction: row;
+        /* flex-wrap: wrap; */
         align-items: center;
         justify-content: center;
         height: 90vh;
@@ -168,7 +208,8 @@
     }
 
     .score,
-    .timer, .best-score {
+    .timer,
+    .best-score {
         font-size: xx-large;
     }
 
@@ -201,6 +242,49 @@
         justify-content: center;
         width: 100%;
         height: 60px;
+    }
+
+    @media only screen and (max-width: 913px) {
+        body {
+            width: auto
+        }
+
+        .game {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: start;
+            height: auto;
+        }
+
+        .aside2 {
+            display: none;
+        }
+
+        .screen {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            justify-content: space-evenly;
+            height: auto;
+            width: 61vh;
+        }
+
+        .aside-mobile{
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            flex-direction: row;
+        }
+        .aside-mobile h2{
+            font-size: 20px;
+        }
+        .aside-mobile img{
+            width: 20px;
+            height: 20px;
+        }
+
+
     }
 </style>
 <script src="jquery-3.6.0.min.js"></script>
@@ -356,7 +440,7 @@
         draw_grille()
 
         localStorage.setItem('point', 0)
-        if (!localStorage.getItem('best_score')){
+        if (!localStorage.getItem('best_score')) {
             addBestScore(0)
         }
 
@@ -377,26 +461,26 @@
         return parseInt(localStorage.getItem('point'))
     }
 
-    function getScore(point){
+    function getScore(point) {
         return parseInt(localStorage.getItem('point'))
     }
 
-    function setScore(point){
+    function setScore(point) {
         localStorage.setItem('point', parseInt(point))
     }
 
 
 
-    function getTime(){
+    function getTime() {
         return parseInt(localStorage.getItem('time'))
     }
 
-    function addBestScore(point){
+    function addBestScore(point) {
         localStorage.setItem('best_score', parseInt(point))
         return parseInt(localStorage.getItem('best_score'))
     }
 
-    function getBestScore(){
+    function getBestScore() {
         return parseInt(localStorage.getItem('best_score'))
     }
 
@@ -437,7 +521,7 @@
             $('.log').addClass('invalid_case')
 
             $('.log').text("Non, " + element.projet.label + " n'est pas la priorite de l'om d'axion")
-            
+
             let time = getTime()
             time -= 10
             localStorage.setItem('time', time)
@@ -500,7 +584,7 @@
                 if (time_left == 0) {
                     clearInterval(id_)
                     setScore(point)
-                    if (getBestScore() < getScore()){
+                    if (getBestScore() < getScore()) {
                         addBestScore(getScore())
                         $('.best-score').text(getBestScore())
                     }
@@ -508,7 +592,7 @@
             }, 10);
             $('.time_left').fadeIn()
 
-            
+
 
         }, 1000);
         point = 0
