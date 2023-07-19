@@ -531,13 +531,13 @@
     function launchTime() {
         let id = setInterval(() => {
             let time = getTime()
+            $('.timer').text(time)
             time--
             if (time <= 0) {
                 clearInterval(id)
                 gameOver()
             }
             localStorage.setItem('time', time)
-            $('.timer').text(time)
         }, 1000)
         localStorage.setItem('id_timer', id)
     }
@@ -574,8 +574,8 @@
             point = getScore()
 
             let id_ = setInterval(() => {
-                time_left--
                 $('.timer').text(time_left)
+                time_left--
                 point++
                 $('.score').text(point)
                 if (time_left <= 0) {
